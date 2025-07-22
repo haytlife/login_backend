@@ -1,0 +1,55 @@
+{
+  "name": "LoginProject",
+  "version": "1.0.0",
+  "description": ".NET 8 Authentication API with Clean Architecture",
+  "framework": ".NET 8.0",
+  "dependencies": {
+    "production": {
+      "Microsoft.AspNetCore.Authentication.JwtBearer": "8.0.10",
+      "Microsoft.EntityFrameworkCore": "8.0.10",
+      "Microsoft.EntityFrameworkCore.Sqlite": "8.0.10",
+      "Microsoft.EntityFrameworkCore.SqlServer": "8.0.10",
+      "Microsoft.EntityFrameworkCore.Tools": "8.0.10",
+      "Microsoft.Extensions.Options": "8.0.0",
+      "System.IdentityModel.Tokens.Jwt": "8.2.1",
+      "Microsoft.IdentityModel.Tokens": "8.2.1",
+      "BCrypt.Net-Next": "4.0.3",
+      "System.ComponentModel.Annotations": "5.0.0"
+    },
+    "development": {
+      "Microsoft.EntityFrameworkCore.Design": "8.0.10",
+      "Swashbuckle.AspNetCore": "6.8.1"
+    }
+  },
+  "scripts": {
+    "restore": "dotnet restore",
+    "build": "dotnet build",
+    "run": "dotnet run --project LoginProject.API",
+    "test": "dotnet test",
+    "migrate": "dotnet ef database update --project LoginProject.Infrastructure --startup-project LoginProject.API",
+    "add-migration": "dotnet ef migrations add --project LoginProject.Infrastructure --startup-project LoginProject.API"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/[username]/LoginProject.git"
+  },
+  "keywords": [
+    ".NET",
+    "Authentication",
+    "JWT",
+    "API",
+    "Clean Architecture",
+    "Entity Framework",
+    "SQLite"
+  ],
+  "license": "Educational",
+  "architecture": {
+    "pattern": "Clean Architecture",
+    "layers": [
+      "LoginProject.API - Presentation Layer",
+      "LoginProject.Application - Business Logic Layer", 
+      "LoginProject.Domain - Core Business Layer",
+      "LoginProject.Infrastructure - Data Access Layer"
+    ]
+  }
+}
