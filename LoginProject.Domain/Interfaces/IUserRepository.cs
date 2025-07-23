@@ -9,7 +9,6 @@ namespace LoginProject.Domain.Interfaces
         Task<User?> GetByUsernameAsync(string username);
         Task<bool> ExistsAsync(string email, string username);
         Task<bool> IsEmailExistsAsync(string email);
-        Task<bool> IsStudentNumberExistsAsync(string studentNumber);
         Task<List<User>> GetByRoleAsync(UserRole role);
         Task<User?> GetUserWithDetailsAsync(int id);
     }

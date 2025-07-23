@@ -1,55 +1,23 @@
 namespace LoginProject.Domain.Enums;
 
+/// <summary>
+/// Sistem içindeki kullanıcı rollerini tanımlayan enum
+/// Her rolün farklı yetkileri ve erişim seviyeleri vardır
+/// </summary>
 public enum UserRole
 {
-    Student = 1,      // Öğrenci
-    Supervisor = 2,   // Staj sorumlusu/danışmanı
-    Company = 3,      // Şirket temsilcisi
-    Admin = 4         // Sistem yöneticisi
+    User = 1,           // Standart kullanıcı - Temel özelliklere erişim
+    Admin = 2           // Sistem yöneticisi - Tüm özelliklere erişim
 }
 
-public enum InternshipType
+/// <summary>
+/// Kullanıcıların cinsiyet bilgilerini tutan enum
+/// Kişisel verilerin doğru kategorize edilmesi için kullanılır
+/// </summary>
+public enum Gender
 {
-    Summer = 1,       // Yaz stajı
-    Winter = 2,       // Kış stajı
-    Project = 3       // Proje bazlı staj
-}
-
-public enum InternshipStatus
-{
-    Applied = 1,      // Başvuru yapıldı
-    Accepted = 2,     // Kabul edildi
-    Rejected = 3,     // Reddedildi
-    InProgress = 4,   // Devam ediyor
-    Completed = 5,    // Tamamlandı
-    Cancelled = 6     // İptal edildi
-}
-
-public enum Department
-{
-    ComputerEngineering = 1,     // Bilgisayar Mühendisliği
-    SoftwareEngineering = 2,     // Yazılım Mühendisliği
-    ElectricalEngineering = 3,   // Elektrik Mühendisliği
-    MechanicalEngineering = 4,   // Makine Mühendisliği
-    IndustrialEngineering = 5,   // Endüstri Mühendisliği
-    BusinessAdministration = 6,  // İşletme
-    Economics = 7,               // İktisat
-    Psychology = 8,              // Psikoloji
-    GraphicDesign = 9,          // Grafik Tasarım
-    Marketing = 10              // Pazarlama
-}
-
-public enum WorkModel
-{
-    OnSite = 1,          // Ofiste çalışma
-    Remote = 2,          // Uzaktan çalışma
-    Hybrid = 3           // Hibrit çalışma
-}
-
-public enum ApplicationStatus
-{
-    Open = 1,            // Başvuru açık
-    Closed = 2,          // Başvuru kapalı
-    Suspended = 3        // Başvuru durduruldu
+    Male = 1,           // Erkek
+    Female = 2,         // Kadın  
+    Other = 3           // Diğer - Alternatif cinsiyet kimliği
 }
 

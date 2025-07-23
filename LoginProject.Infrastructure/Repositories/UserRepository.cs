@@ -17,19 +17,14 @@ public class UserRepository : Repository<User>, IUserRepository
 
     public async Task<User?> GetByUsernameAsync(string username)
     {
-        // Username olarak email kullanıyoruz
+        // Kullanıcı adı olarak email kullanıyoruz
         return await _dbSet.FirstOrDefaultAsync(u => u.Email == username);
     }
 
     public async Task<bool> ExistsAsync(string email, string username)
     {
-        // Username olarak email kullanıyoruz
+        // Kullanıcı adı olarak email kullanıyoruz
         return await _dbSet.AnyAsync(u => u.Email == email || u.Email == username);
-    }
-
-    public async Task<User?> GetByStudentNumberAsync(string studentNumber)
-    {
-        return await _dbSet.FirstOrDefaultAsync(u => u.StudentNumber == studentNumber);
     }
 
     public async Task<IEnumerable<User>> GetUsersByRoleAsync(UserRole role)
@@ -45,11 +40,6 @@ public class UserRepository : Repository<User>, IUserRepository
     public async Task<bool> IsEmailExistsAsync(string email)
     {
         return await _dbSet.AnyAsync(u => u.Email == email);
-    }
-
-    public async Task<bool> IsStudentNumberExistsAsync(string studentNumber)
-    {
-        return await _dbSet.AnyAsync(u => u.StudentNumber == studentNumber);
     }
 
     public async Task<User?> GetUserWithDetailsAsync(int id)

@@ -3,30 +3,35 @@ using LoginProject.Domain.Enums;
 
 namespace LoginProject.Domain.Entities;
 
+/// <summary>
+/// Sistem kullanıcılarını temsil eden ana varlık sınıfı
+/// Bu sınıf, kullanıcının temel bilgilerini ve authentication verilerini tutar
+/// </summary>
 public class User : BaseEntity
 {
+    // Kimlik Bilgileri - Kullanıcının temel tanımlayıcı bilgileri
     public string FirstName { get; set; } = string.Empty;
     public string LastName { get; set; } = string.Empty;
     public string Email { get; set; } = string.Empty;
-    public string PasswordHash { get; set; } = string.Empty;
+    
+    // Güvenlik Bilgileri - Authentication için gerekli veriler
+    public string PasswordHash { get; set; } = string.Empty;  // BCrypt ile hashlenmiş şifre
+    public UserRole Role { get; set; }                        // Kullanıcının sistem içindeki rolü
+    public bool IsActive { get; set; } = true;               // Hesap aktiflik durumu
+    
+    // İletişim Bilgileri
     public string? PhoneNumber { get; set; }
-    public UserRole Role { get; set; }
-    public bool IsActive { get; set; } = true;
     
-    // Öğrenci için ek bilgiler
-    public string? StudentNumber { get; set; }
-    public string? Department { get; set; }
-    public string? University { get; set; }
-    public int? Grade { get; set; } // Kaçıncı sınıf
-    public decimal? GPA { get; set; } // Not ortalaması (4.0 üzerinden)
+    // Kişisel Bilgiler - Kullanıcının demografik ve lokasyon verileri
+    public Gender? Gender { get; set; }
+    public DateTime? BirthDate { get; set; }
+    public string? City { get; set; }
+    public string? Country { get; set; } = "Türkiye";
     
-    // Şirket temsilcisi için ek bilgiler
-    public string? CompanyName { get; set; }
-    public string? Position { get; set; }
-    
-    // Navigation Properties
+    // İlişkisel Veriler - Diğer varlıklarla olan bağlantılar
     public virtual ICollection<Session> Sessions { get; set; } = new List<Session>();
     
-    // Calculated Properties
+    // Hesaplanmış Özellikler - Mevcut verilerden türetilen bilgiler
     public string FullName => $"{FirstName} {LastName}";
+    public int? Age => BirthDate.HasValue ? (int)((DateTime.Now - BirthDate.Value).TotalDays / 365.25) : null;
 }

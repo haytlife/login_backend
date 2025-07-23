@@ -6,12 +6,22 @@ using System.Text;
 using BCrypt.Net;
 using LoginProject.Application.DTOs.Auth;
 using LoginProject.Application.Services.Interfaces;
+using LoginProject.Application.Utilities;
 using LoginProject.Domain.Entities;
 using LoginProject.Domain.Enums;
 using LoginProject.Domain.Interfaces;
 
 namespace LoginProject.Application.Services;
 
+/// <summary>
+/// Kimlik doğrulama ve kullanıcı yönetimi servis implementasyonu
+/// 
+/// Bu servis, modern güvenlik standartlarına uygun olarak tasarlanmıştır:
+/// - JWT token tabanlı authentication
+/// - BCrypt ile güvenli şifre hashleme
+/// - Session yönetimi ile token takibi
+/// - Role-based authorization desteği
+/// </summary>
 public class AuthService : IAuthService
 {
     private readonly IUserRepository _userRepository;
@@ -74,26 +84,29 @@ public class AuthService : IAuthService
                 Email = user.Email,
                 Role = user.Role.ToString(),
                 PhoneNumber = user.PhoneNumber,
-                StudentNumber = user.StudentNumber,
-                Department = user.Department,
-                University = user.University
+                
+                // Temel bilgiler
+                Gender = user.Gender,
+                BirthDate = user.BirthDate,
+                Age = user.Age,
+                City = user.City,
+                Country = user.Country
             }
         };
     }
 
     public async Task<AuthResponseDto> RegisterAsync(RegisterRequestDto request)
     {
+        // Şifre güçlülük kontrolü
+        if (!PasswordValidator.IsValidPassword(request.Password))
+        {
+            throw new InvalidOperationException(PasswordValidator.GetPasswordRequirements());
+        }
+
         // Email kontrolü
         if (await _userRepository.IsEmailExistsAsync(request.Email))
         {
             throw new InvalidOperationException("Bu email adresi zaten kullanılıyor.");
-        }
-
-        // Öğrenci numarası kontrolü (eğer verilmişse)
-        if (!string.IsNullOrEmpty(request.StudentNumber) && 
-            await _userRepository.IsStudentNumberExistsAsync(request.StudentNumber))
-        {
-            throw new InvalidOperationException("Bu öğrenci numarası zaten kullanılıyor.");
         }
 
         // Şifreyi hash'le
@@ -109,11 +122,12 @@ public class AuthService : IAuthService
             PhoneNumber = request.PhoneNumber,
             Role = Enum.Parse<UserRole>(request.Role),
             IsActive = true,
-            StudentNumber = request.StudentNumber,
-            Department = request.Department,
-            University = request.University,
-            Grade = request.Grade,
-            GPA = request.GPA
+            
+            // Temel bilgiler
+            Gender = request.Gender,
+            BirthDate = request.BirthDate,
+            City = request.City,
+            Country = request.Country
         };
 
         await _userRepository.AddAsync(user);
@@ -170,5 +184,55 @@ public class AuthService : IAuthService
             _sessionRepository.Update(session);
             await _sessionRepository.SaveChangesAsync();
         }
+    }
+
+    public async Task<string> ForgotPasswordAsync(ForgotPasswordRequestDto request)
+    {
+        var user = await _userRepository.GetByEmailAsync(request.Email);
+        if (user == null)
+            throw new InvalidOperationException("Bu email ile kayıtlı kullanıcı bulunamadı.");
+
+        // Reset token oluştur
+        var resetToken = GeneratePasswordResetToken();
+        
+        // Gerçek uygulamada burada token veritabanına kaydedilir ve e-posta gönderilir
+        // Şimdilik sadece token'ı döndürüyoruz
+        return resetToken;
+    }
+
+    public async Task<bool> ResetPasswordAsync(ResetPasswordRequestDto request)
+    {
+        // Şifre güçlülük kontrolü
+        if (!PasswordValidator.IsValidPassword(request.NewPassword))
+        {
+            throw new InvalidOperationException(PasswordValidator.GetPasswordRequirements());
+        }
+
+        var user = await _userRepository.GetByEmailAsync(request.Email);
+        if (user == null)
+            throw new InvalidOperationException("Bu email ile kayıtlı kullanıcı bulunamadı.");
+
+        // Gerçek uygulamada token doğrulaması yapılır
+        // Şimdilik basit kontrol
+        if (string.IsNullOrEmpty(request.Token))
+            throw new InvalidOperationException("Geçersiz reset token.");
+
+        // Yeni şifreyi hash'le
+        var newPasswordHash = BCrypt.Net.BCrypt.HashPassword(request.NewPassword);
+        
+        // Kullanıcının şifresini güncelle
+        user.PasswordHash = newPasswordHash;
+        user.UpdatedAt = DateTime.UtcNow;
+        
+        // Değişiklikleri kaydet
+        _userRepository.Update(user);
+        await _userRepository.SaveChangesAsync();
+
+        return true;
+    }
+
+    public string GeneratePasswordResetToken()
+    {
+        return Guid.NewGuid().ToString("N")[..16]; // 16 karakterlik token
     }
 }

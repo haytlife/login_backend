@@ -445,3 +445,63 @@ appsettings.Local.json
 
 # User secrets
 secrets.json
+
+# LoginProject Specific Ignores
+# SQLite database files
+LoginProject.db*
+LoginProject_Dev.db*
+
+# Development settings  
+appsettings.Development.json
+
+# ====================================
+# TEAM COLLABORATION - 5 PERSON TEAM
+# ====================================
+
+# Individual developer settings
+appsettings.Local.json
+appsettings.Personal.json
+appsettings.*.local.json
+
+# Frontend team workspace (diğer takım üyeleri için)
+frontend/
+client/
+web/
+mobile/
+
+# Temporary development files
+temp/
+tmp/
+*.temp
+
+# Environment specific files
+.env.*
+*.env
+
+# Individual IDE preferences
+.vscode/settings.json
+.vscode/launch.json
+*.code-workspace
+
+# Documentation drafts
+docs/drafts/
+*.draft.md
+
+# Team member personal notes
+notes/
+personal-notes/
+*.notes.txt
+
+# Test data and mock files
+test-data/
+mock-data/
+sample-data/
+
+# Individual backup files
+backup/
+*.backup
+*.bak
+
+# Team shared but temporary files
+shared-temp/
+team-temp/

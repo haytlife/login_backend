@@ -8,5 +8,8 @@ public interface IAuthService
     Task<AuthResponseDto> RegisterAsync(RegisterRequestDto request);
     Task<bool> ValidateTokenAsync(string token);
     Task LogoutAsync(string token);
+    Task<string> ForgotPasswordAsync(ForgotPasswordRequestDto request);
+    Task<bool> ResetPasswordAsync(ResetPasswordRequestDto request);
     string GenerateJwtToken(Domain.Entities.User user);
+    string GeneratePasswordResetToken();
 }
