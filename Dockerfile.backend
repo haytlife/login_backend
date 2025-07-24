@@ -1,0 +1,36 @@
+# Backend Dockerfile
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
+WORKDIR /app
+EXPOSE 5000
+
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+WORKDIR /src
+
+# Copy project files
+COPY ["login_backend/LoginProject.API/LoginProject.API.csproj", "LoginProject.API/"]
+COPY ["login_backend/LoginProject.Application/LoginProject.Application.csproj", "LoginProject.Application/"]
+COPY ["login_backend/LoginProject.Domain/LoginProject.Domain.csproj", "LoginProject.Domain/"]
+COPY ["login_backend/LoginProject.Infrastructure/LoginProject.Infrastructure.csproj", "LoginProject.Infrastructure/"]
+
+# Restore dependencies
+RUN dotnet restore "LoginProject.API/LoginProject.API.csproj"
+
+# Copy all backend source code
+COPY login_backend/ .
+
+# Build the application
+WORKDIR "/src/LoginProject.API"
+RUN dotnet build "LoginProject.API.csproj" -c Release -o /app/build
+
+FROM build AS publish
+RUN dotnet publish "LoginProject.API.csproj" -c Release -o /app/publish
+
+FROM base AS final
+WORKDIR /app
+COPY --from=publish /app/publish .
+
+# Environment variables
+ENV ASPNETCORE_ENVIRONMENT=Production
+ENV ASPNETCORE_URLS=http://+:5000
+
+ENTRYPOINT ["dotnet", "LoginProject.API.dll"]

@@ -1,0 +1,30 @@
+# Frontend Dockerfile
+FROM node:18-alpine AS build
+
+WORKDIR /app
+
+# Copy package files
+COPY vite-project/package*.json ./
+
+# Install all dependencies (including devDependencies for build)
+RUN npm ci
+
+# Copy source code
+COPY vite-project/ .
+
+# Build the application
+RUN npm run build
+
+# Production stage with nginx
+FROM nginx:alpine AS production
+
+# Copy custom nginx config
+COPY nginx.conf /etc/nginx/nginx.conf
+
+# Copy built files to nginx
+COPY --from=build /app/dist /usr/share/nginx/html
+
+# Expose port 3000
+EXPOSE 3000
+
+CMD ["nginx", "-g", "daemon off;"]

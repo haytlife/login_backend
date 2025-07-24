@@ -1,0 +1,45 @@
+# Git
+.git
+.gitignore
+README.md
+
+# Docker
+Dockerfile*
+docker-compose*
+.dockerignore
+
+# Node.js
+vite-project/node_modules
+vite-project/npm-debug.log
+vite-project/dist
+vite-project/.env
+
+# .NET
+login_backend/**/bin
+login_backend/**/obj
+login_backend/**/*.user
+login_backend/**/*.suo
+login_backend/**/*.userosscache
+login_backend/**/*.sln.docstates
+login_backend/**/packages
+login_backend/**/TestResults
+login_backend/**/.vs
+
+# Flutter
+login_mobile_app/.dart_tool
+login_mobile_app/build
+login_mobile_app/.flutter-plugins
+login_mobile_app/.flutter-plugins-dependencies
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log

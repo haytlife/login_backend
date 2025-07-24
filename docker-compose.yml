@@ -1,0 +1,41 @@
+# Docker Compose for Login Project
+version: '3.8'
+
+services:
+  # React Frontend (Vite + Nginx)
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    container_name: login-frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    networks:
+      - login-network
+    restart: unless-stopped
+
+  # .NET Backend API
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    container_name: login-backend
+    ports:
+      - "5000:5000"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://+:5000
+    volumes:
+      - ./login_backend/LoginProject.API/LoginProject.db:/app/LoginProject.db
+    networks:
+      - login-network
+    restart: unless-stopped
+
+networks:
+  login-network:
+    driver: bridge
+
+volumes:
+  database-data:

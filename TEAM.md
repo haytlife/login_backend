@@ -8,12 +8,55 @@
 - **LoginProject.Domain** - Core entities
 - **LoginProject.Infrastructure** - Data access
 
+### Frontend (JavaScript - Tamamlandı)
+- Modern web arayüzü
+- JWT token yönetimi
+- Responsive tasarım
+
+### Mobile (Flutter - Geliştiriliyor)
+- Cross-platform mobil uygulama
+- iOS ve Android desteği
+- Native performans
+- Dart programlama dili
+
 ## API Entegrasyon Bilgileri
 
 ### Base URL
 ```
 Development: http://localhost:5000
 Production: [To be configured]
+Mobile (Flutter): http://10.0.2.2:5000 (Android Emulator)
+Mobile (Flutter): http://localhost:5000 (iOS Simulator)
+```
+
+### Flutter Setup
+```bash
+# Flutter projesi oluşturma
+flutter create login_mobile_app
+cd login_mobile_app
+
+# Gerekli paketler (pubspec.yaml'a eklenecek)
+dependencies:
+  http: ^1.1.0
+  provider: ^6.1.1
+  shared_preferences: ^2.2.2
+  flutter_secure_storage: ^9.0.0
+```
+
+### Mobile API Configuration
+```dart
+// lib/services/api_config.dart
+import 'dart:io';
+
+class ApiConfig {
+  static String get baseUrl {
+    if (Platform.isAndroid) {
+      return 'http://10.0.2.2:5000/api';  // Android emulator
+    } else {
+      return 'http://localhost:5000/api'; // iOS simulator
+    }
+  }
+}
 ```
 
 ### Authentication Endpoints
