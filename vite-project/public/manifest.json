@@ -1,0 +1,16 @@
+{
+  "name": "LoginProject - Authentication System",
+  "short_name": "LoginProject",
+  "description": "Modern authentication system with JWT and React",
+  "start_url": "/",
+  "display": "standalone",
+  "theme_color": "#1f2937",
+  "background_color": "#ffffff",
+  "icons": [
+    {
+      "src": "/vite.svg",
+      "sizes": "32x32",
+      "type": "image/svg+xml"
+    }
+  ]
+}

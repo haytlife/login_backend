@@ -35,12 +35,27 @@ const makeRequest = async (endpoint, options = {}) => {
     DebugHelper.logApiResponse(`${API_BASE_URL}${endpoint}`, response.status, data);
 
     if (!response.ok) {
+      // Backend'den gelen hata mesajını al
+      const backendErrorMessage = data?.message || data?.error || data?.title || 'Unknown error';
+      
+      console.log('🔍 Backend Error Details:', {
+        status: response.status,
+        data: data,
+        message: backendErrorMessage
+      });
+      
       // 400 Bad Request için özel işlem
       if (response.status === 400) {
-        throw new Error(ApiErrorHandler.handle400Error(data.message));
+        throw new Error(backendErrorMessage);
       }
-      // Diğer HTTP hataları için genel işlem
-      throw new Error(ApiErrorHandler.handleHttpError(response.status, data.message));
+      
+      // 401 Unauthorized için backend mesajını kullan
+      if (response.status === 401) {
+        throw new Error(backendErrorMessage);
+      }
+      
+      // Diğer HTTP hataları için backend mesajını kullan
+      throw new Error(backendErrorMessage);
     }
 
     return { success: true, data, response };

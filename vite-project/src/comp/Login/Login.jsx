@@ -15,6 +15,7 @@ const Login = () => {
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmNewPassword, setShowConfirmNewPassword] = useState(false);
   const [loginSuccess, setLoginSuccess] = useState(false);
+  const [formKey, setFormKey] = useState(Date.now()); // Form'u yeniden render etmek için key
   const [formData, setFormData] = useState({
     email: '',
     username: '',
@@ -34,8 +35,9 @@ const Login = () => {
   const { login, register, forgotPassword, resetPassword, loading } = useAuth();
   const navigate = useNavigate();
 
-  // Form sıfırlama
+  // Sayfa yüklendiğinde/yenilendiğinde form verilerini tamamen temizle
   useEffect(() => {
+    // 1. Tüm form state'lerini sıfırla
     setFormData({
       email: '',
       username: '',
@@ -51,13 +53,55 @@ const Login = () => {
     });
     setError('');
     setSuccess('');
+    setShowForgotPassword(false);
     setForgotPasswordStep(1);
     setShowTokenDisplay(false);
     setReceivedToken('');
-    setShowPassword(false);
-    setShowConfirmPassword(false);
-    setShowNewPassword(false);
-    setShowConfirmNewPassword(false);
+    setLoginSuccess(false);
+
+    // 2. Browser'daki form verilerini de temizle
+    const formElements = document.querySelectorAll('input[type="email"], input[type="password"], input[type="text"]');
+    formElements.forEach(element => {
+      element.value = '';
+      element.setAttribute('value', '');
+    });
+
+    // 3. Browser'ın autocomplete cache'ini temizle (sessionStorage kullanarak)
+    sessionStorage.removeItem('loginFormData');
+    
+    // 4. Component re-render'ı zorla
+    setTimeout(() => {
+      const emailInputs = document.querySelectorAll('input[type="email"]');
+      emailInputs.forEach(input => {
+        input.value = '';
+        input.defaultValue = '';
+      });
+    }, 100);
+
+    // 5. Window load event'i ekle
+    const clearFormOnLoad = () => {
+      const allInputs = document.querySelectorAll('input');
+      allInputs.forEach(input => {
+        input.value = '';
+        input.defaultValue = '';
+      });
+    };
+
+    window.addEventListener('load', clearFormOnLoad);
+    
+    // 6. Form key'ini değiştirerek component'i tamamen yeniden render et
+    setFormKey(Date.now());
+    
+    // Cleanup function
+    return () => {
+      window.removeEventListener('load', clearFormOnLoad);
+    };
+  }, []); // Boş dependency array ile sadece component mount olduğunda çalışır
+
+  // Form görünümü değiştiğinde hata mesajlarını temizle
+  useEffect(() => {
+    setError('');
+    setSuccess('');
   }, [isSignIn, showForgotPassword]);
 
   const handleInputChange = (e) => {
@@ -115,10 +159,14 @@ const Login = () => {
       }
 
       try {
+        console.log('🔄 Login attempt for:', formData.email);
+        
         const result = await login({
           email: formData.email,
           password: formData.password
         });
+
+        console.log('📧 Login result:', result);
 
         if (result && result.success) {
           setSuccess(result.message || 'Login successful!');
@@ -127,11 +175,14 @@ const Login = () => {
             navigate('/dashboard');
           }, 2000);
         } else {
-          setError(result?.message || 'Login failed');
+          const errorMsg = result?.message || 'Login failed. Please check your credentials.';
+          console.log('❌ Login failed:', errorMsg);
+          setError(errorMsg);
         }
       } catch (err) {
-        setError('An error occurred during login');
-        console.error('Login error:', err);
+        const errorMsg = err?.message || 'An unexpected error occurred during login';
+        console.log('💥 Login error caught:', err);
+        setError(errorMsg);
       }
     } else {
       if (!formData.email || !formData.username || !formData.phoneNumber || !formData.password || !formData.confirmPassword) {
@@ -234,7 +285,12 @@ const Login = () => {
     }
 
     try {
-      const result = await resetPassword(forgotPasswordData.token, forgotPasswordData.newPassword);
+      const result = await resetPassword({
+        email: forgotPasswordData.email,
+        token: forgotPasswordData.token,
+        newPassword: forgotPasswordData.newPassword,
+        confirmPassword: forgotPasswordData.confirmPassword
+      });
 
       if (result && result.success) {
         setSuccess(result.message || 'Password reset successful!');
@@ -366,6 +422,7 @@ const Login = () => {
                         Email Address
                       </label>
                       <input
+                        key={`reset-email-${formKey}`}
                         type="email"
                         id="resetEmail"
                         name="email"
@@ -373,6 +430,7 @@ const Login = () => {
                         onChange={handleForgotPasswordInputChange}
                         className="input-style"
                         placeholder="Enter your email address"
+                        autocomplete="off"
                         required
                       />
                     </div>
@@ -445,6 +503,7 @@ const Login = () => {
                         Email Address
                       </label>
                       <input
+                        key={`reset-form-email-${formKey}`}
                         type="email"
                         id="resetFormEmail"
                         name="email"
@@ -452,6 +511,7 @@ const Login = () => {
                         onChange={handleForgotPasswordInputChange}
                         className="input-style"
                         placeholder="Enter your email address"
+                        autocomplete="off"
                         required
                       />
                     </div>
@@ -478,6 +538,7 @@ const Login = () => {
                       </label>
                       <div className="relative">
                         <input
+                          key={`new-password-${formKey}`}
                           type={showNewPassword ? "text" : "password"}
                           id="newPassword"
                           name="newPassword"
@@ -485,6 +546,7 @@ const Login = () => {
                           onChange={handleForgotPasswordInputChange}
                           className="input-style pr-12"
                           placeholder="Enter new password"
+                          autocomplete="off"
                           required
                         />
                         <button
@@ -572,7 +634,12 @@ const Login = () => {
               <form onSubmit={handleSubmit} className="space-y-4">
                 {error && (
                   <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
-                    {error}
+                    <div className="flex items-center">
+                      <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                      </svg>
+                      <span className="text-sm font-medium">{error}</span>
+                    </div>
                   </div>
                 )}
                 
@@ -587,6 +654,7 @@ const Login = () => {
                     Email Address
                   </label>
                   <input
+                    key={`main-email-${formKey}`}
                     type="email"
                     id="email"
                     name="email"
@@ -594,6 +662,7 @@ const Login = () => {
                     onChange={handleInputChange}
                     className="input-style"
                     placeholder="Enter your email"
+                    autocomplete="off"
                     required
                   />
                 </div>
@@ -640,6 +709,7 @@ const Login = () => {
                   </label>
                   <div className="relative">
                     <input
+                      key={`main-password-${formKey}`}
                       type={showPassword ? "text" : "password"}
                       id="password"
                       name="password"
@@ -647,6 +717,7 @@ const Login = () => {
                       onChange={handleInputChange}
                       className="input-style pr-12"
                       placeholder="Password"
+                      autocomplete="off"
                       required
                     />
                     <button
