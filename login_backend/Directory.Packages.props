@@ -1,0 +1,31 @@
+<Project>
+  <PropertyGroup>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Authentication & JWT -->
+    <PackageVersion Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.10" />
+    <PackageVersion Include="Microsoft.IdentityModel.Tokens" Version="8.2.1" />
+    <PackageVersion Include="System.IdentityModel.Tokens.Jwt" Version="8.2.1" />
+    
+    <!-- Entity Framework Core -->
+    <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="8.0.10" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.10" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.10" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.10" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.10" />
+    
+    <!-- Security & Cryptography -->
+    <PackageVersion Include="BCrypt.Net-Next" Version="4.0.3" />
+    
+    <!-- Microsoft Extensions -->
+    <PackageVersion Include="Microsoft.Extensions.Options" Version="8.0.0" />
+    
+    <!-- Documentation -->
+    <PackageVersion Include="Swashbuckle.AspNetCore" Version="6.8.1" />
+    
+    <!-- Validation & Annotations -->
+    <PackageVersion Include="System.ComponentModel.Annotations" Version="5.0.0" />
+  </ItemGroup>
+</Project>
