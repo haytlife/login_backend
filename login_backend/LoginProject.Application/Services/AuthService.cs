@@ -235,4 +235,40 @@ public class AuthService : IAuthService
     {
         return Guid.NewGuid().ToString("N")[..16]; // 16 karakterlik token
     }
+
+    public async Task<UserInfoDto> UpdateProfileAsync(int userId, UpdateProfileRequestDto request)
+    {
+        var user = await _userRepository.GetByIdAsync(userId);
+        if (user == null)
+            throw new InvalidOperationException("Kullanıcı bulunamadı.");
+
+        // Bilgileri güncelle
+        user.FirstName = request.FirstName;
+        user.LastName = request.LastName ?? string.Empty;
+        user.PhoneNumber = request.PhoneNumber;
+        user.City = request.City;
+        user.Country = request.Country ?? "Türkiye";
+        user.Gender = request.Gender;
+        user.BirthDate = request.BirthDate;
+        user.UpdatedAt = DateTime.UtcNow;
+
+        // Değişiklikleri kaydet
+        _userRepository.Update(user);
+        await _userRepository.SaveChangesAsync();
+
+        return new UserInfoDto
+        {
+            Id = user.Id,
+            FirstName = user.FirstName,
+            LastName = user.LastName,
+            Email = user.Email,
+            Role = user.Role.ToString(),
+            PhoneNumber = user.PhoneNumber,
+            Gender = user.Gender,
+            BirthDate = user.BirthDate,
+            Age = user.Age,
+            City = user.City,
+            Country = user.Country
+        };
+    }
 }

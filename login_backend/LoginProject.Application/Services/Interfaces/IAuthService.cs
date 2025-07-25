@@ -10,6 +10,7 @@ public interface IAuthService
     Task LogoutAsync(string token);
     Task<string> ForgotPasswordAsync(ForgotPasswordRequestDto request);
     Task<bool> ResetPasswordAsync(ResetPasswordRequestDto request);
+    Task<UserInfoDto> UpdateProfileAsync(int userId, UpdateProfileRequestDto request);
     string GenerateJwtToken(Domain.Entities.User user);
     string GeneratePasswordResetToken();
 }

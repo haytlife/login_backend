@@ -156,5 +156,36 @@ namespace LoginProject.API.Controllers
                 role = User.FindFirst(ClaimTypes.Role)?.Value
             });
         }
+
+        [HttpPut("profile")]
+        [Authorize]
+        public async Task<IActionResult> UpdateProfile([FromBody] UpdateProfileRequestDto request)
+        {
+            try
+            {
+                var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (!int.TryParse(userIdClaim, out int userId))
+                {
+                    return BadRequest(new { message = "Geçersiz kullanıcı ID'si." });
+                }
+
+                var updatedUser = await _authService.UpdateProfileAsync(userId, request);
+                return Ok(new 
+                { 
+                    success = true,
+                    message = "Profil başarıyla güncellendi.",
+                    user = updatedUser
+                });
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[UPDATE PROFILE ERROR] {ex}");
+                return BadRequest(new { message = "Profil güncellenirken bir hata oluştu." });
+            }
+        }
     }
 }

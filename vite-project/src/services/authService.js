@@ -105,9 +105,8 @@ export const authService = {
 
       return {
         success: true,
-        data: data.data,
-        token: data.data.token,
-        user: data.data.user,
+        token: data.token,
+        user: data.user,
         message: data.message || 'Giriş başarılı'
       };
     } catch (error) {

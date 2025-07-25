@@ -1,23 +1,120 @@
-# LoginProject - .NET 8 Authentication API Requirements
-# Bu dosya .NET projesi için gerekli değil, ancak referans olarak tutulabilir
+# LoginProject - Sistem Gereksinimleri
 
-# .NET 8 Framework Requirements
-# - .NET 8.0 SDK veya üzeri
-# - Visual Studio 2022 veya VS Code
+## Geliştirme Ortamı Gereksinimleri
 
-# NuGet Package Dependencies (Otomatik yüklenecek)
-# Şu paketler zaten .csproj dosyalarında tanımlı:
+### Backend (.NET 8)
+- .NET 8.0 SDK veya üzeri
+- Visual Studio 2022 / VS Code / Rider (opsiyonel)
 
-# API Layer:
-# - Microsoft.AspNetCore.Authentication.JwtBearer v8.0.10
-# - Microsoft.EntityFrameworkCore.Design v8.0.10
-# - Microsoft.EntityFrameworkCore.Sqlite v8.0.10
-# - Swashbuckle.AspNetCore v6.8.1
+### Frontend (React + Vite)
+- Node.js 18.0.0 veya üzeri
+- npm 9.0.0 veya üzeri (Node.js ile birlikte gelir)
 
-# Application Layer:
-# - BCrypt.Net-Next v4.0.3
-# - Microsoft.Extensions.Options v8.0.0
-# - System.IdentityModel.Tokens.Jwt v8.2.1
+### Veritabanı
+- SQLite (Entity Framework ile otomatik yönetilir)
+
+### Version Control
+- Git 2.30+ 
+
+## Otomatik Yüklenecek Paketler
+
+### .NET NuGet Packages (Backend)
+Bu paketler `dotnet restore` ile otomatik yüklenecek:
+
+**API Layer:**
+- Microsoft.AspNetCore.Authentication.JwtBearer v8.0.10
+- Microsoft.EntityFrameworkCore.Design v8.0.10
+- Microsoft.EntityFrameworkCore.Sqlite v8.0.10
+- Swashbuckle.AspNetCore v6.8.1
+
+**Application Layer:**
+- BCrypt.Net-Next v4.0.3
+- Microsoft.Extensions.Options v8.0.0
+- System.IdentityModel.Tokens.Jwt v8.2.1
+
+**Infrastructure Layer:**
+- Microsoft.EntityFrameworkCore v8.0.10
+- Microsoft.EntityFrameworkCore.Sqlite v8.0.10
+
+### NPM Packages (Frontend)
+Bu paketler `npm install` ile otomatik yüklenecek:
+
+**Dependencies:**
+- react ^19.1.0
+- react-dom ^19.1.0
+- react-router-dom ^7.7.0
+- tailwindcss ^4.1.11
+- @tailwindcss/vite ^4.1.11
+
+**Dev Dependencies:**
+- @eslint/js ^9.30.1
+- @types/react ^19.1.2
+- @types/react-dom ^19.1.2
+- @vitejs/plugin-react ^4.3.4
+- eslint ^9.30.1
+- eslint-plugin-react ^7.37.3
+- eslint-plugin-react-hooks ^5.1.0
+- eslint-plugin-react-refresh ^0.4.14
+- globals ^15.12.0
+- vite ^7.0.6
+
+## Hızlı Başlangıç
+
+### 1. Sistem Kontrolü
+```bash
+# .NET versiyonunu kontrol edin
+dotnet --version  # 8.0.0 veya üzeri olmalı
+
+# Node.js versiyonunu kontrol edin  
+node --version    # v18.0.0 veya üzeri olmalı
+npm --version     # 9.0.0 veya üzeri olmalı
+
+# Git versiyonunu kontrol edin
+git --version     # 2.30 veya üzeri olmalı
+```
+
+### 2. Proje Kurulumu
+```bash
+# Projeyi klonlayın
+git clone <repository-url>
+cd LoginProject
+
+# Backend paketlerini yükleyin
+cd login_backend/LoginProject.API
+dotnet restore
+
+# Frontend paketlerini yükleyin  
+cd ../../vite-project
+npm install
+```
+
+### 3. Geliştirme Sunucularını Başlatın
+```bash
+# Terminal 1: Backend
+cd login_backend/LoginProject.API
+dotnet run
+
+# Terminal 2: Frontend
+cd vite-project  
+npm run dev
+```
+
+## IDE Önerileri
+
+### Visual Studio Code Extensions
+- C# for Visual Studio Code
+- ES7+ React/Redux/React-Native snippets
+- Tailwind CSS IntelliSense
+- Auto Rename Tag
+- Bracket Pair Colorizer
+
+### Visual Studio 2022
+- Tüm özellikler built-in olarak gelir
+
+## Port Bilgileri
+- Backend API: http://localhost:5000
+- Frontend Dev Server: http://localhost:5173
+- SQLite Database: Yerel dosya (LoginProject.db)
 # - Microsoft.IdentityModel.Tokens v8.2.1
 # - System.ComponentModel.Annotations v5.0.0
 
