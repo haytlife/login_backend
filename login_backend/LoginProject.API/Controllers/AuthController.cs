@@ -33,11 +33,8 @@ namespace LoginProject.API.Controllers
             try
             {
                 var resetToken = await _authService.ForgotPasswordAsync(request);
-                // Gerçek uygulamada: E-posta gönderimi yapılır. Şimdilik reset token'ı response olarak döndürüyoruz.
-                return Ok(new { 
-                    message = "Şifre sıfırlama token'ı oluşturuldu. E-posta adresinizi kontrol edin.", 
-                    resetToken // Gerçek uygulamada bu döndürülmez
-                });
+
+                return Ok(new { resetToken = $"Reset token: {resetToken}" });
             }
             catch (Exception ex)
             {
