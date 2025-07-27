@@ -5,6 +5,16 @@ import "./Login.css";
 import "./Tail.css";
 
 const Login = () => {
+  // Forgot Password başlangıç ekranına sıfırlama fonksiyonu
+  const resetForgotPasswordScreen = () => {
+    setShowForgotPassword(true);
+    setForgotPasswordStep(1);
+    setShowTokenDisplay(false);
+    setReceivedToken('');
+    setForgotPasswordData({ email: '', token: '', newPassword: '', confirmPassword: '' });
+    setError('');
+    setSuccess('');
+  };
   const [isSignIn, setIsSignIn] = useState(true);
   const [showForgotPassword, setShowForgotPassword] = useState(false);
   const [forgotPasswordStep, setForgotPasswordStep] = useState(1);
@@ -238,7 +248,11 @@ const Login = () => {
 
       if (result && result.success) {
         // Backend'den gelen token'ı al
-        const token = result.data || result.token || result.resetToken;
+        // Sadece token değeri gelsin, başında metin olmasın
+        let token = result.data || result.token || result.resetToken;
+        if (typeof token === 'string' && token.includes(':')) {
+          token = token.split(':').pop().trim();
+        }
         setReceivedToken(token || 'Token received');
         setShowTokenDisplay(true);
         setForgotPasswordStep(2);
@@ -253,7 +267,12 @@ const Login = () => {
 
   const copyTokenToClipboard = () => {
     if (receivedToken) {
-      navigator.clipboard.writeText(receivedToken);
+      // Sadece token'ın kendisini kopyala, başında metin varsa ayıkla
+      let token = receivedToken;
+      if (typeof token === 'string' && token.includes(':')) {
+        token = token.split(':').pop().trim();
+      }
+      navigator.clipboard.writeText(token);
       setSuccess('Token copied to clipboard!');
       setTimeout(() => setSuccess(''), 2000);
     }
@@ -452,9 +471,6 @@ const Login = () => {
                     )}
 
                     <div>
-                      <label className="block mb-2 font-medium text-gray-700">
-                        Reset Token (Copy this token)
-                      </label>
                       <div className="flex items-center space-x-2">
                         <input
                           type="text"
@@ -462,6 +478,7 @@ const Login = () => {
                           readOnly
                           className="input-style flex-1 bg-gray-50 cursor-text"
                           onClick={(e) => e.target.select()}
+                          placeholder="Reset token"
                         />
                         <button
                           type="button"
@@ -471,9 +488,6 @@ const Login = () => {
                           Copy
                         </button>
                       </div>
-                      <p className="text-sm text-gray-600 mt-2">
-                        Click the token to select all, then copy it. You'll need this token in the next step.
-                      </p>
                     </div>
 
                     <button
@@ -793,7 +807,7 @@ const Login = () => {
                   <div className="text-sm text-center mt-2">
                     <button
                       type="button"
-                      onClick={() => setShowForgotPassword(true)}
+                      onClick={resetForgotPasswordScreen}
                       className="text-blue-600 hover:underline hover:bg-blue-50 px-3 py-2 rounded transition-colors font-medium border-none outline-none"
                       style={{ backgroundColor: 'transparent', boxShadow: 'none' }}
                     >
