@@ -292,6 +292,17 @@ const Login = () => {
       return;
     }
 
+    // Token kontrolü: Kullanıcının girdiği token ile backend'den gelen token aynı mı?
+    let backendToken = receivedToken;
+    if (typeof backendToken === 'string' && backendToken.includes(':')) {
+      backendToken = backendToken.split(':').pop().trim();
+    }
+    let userToken = forgotPasswordData.token.trim();
+    if (userToken !== backendToken) {
+      setError('Invalid token. Please check the token and try again.');
+      return;
+    }
+
     if (forgotPasswordData.newPassword !== forgotPasswordData.confirmPassword) {
       setError('Passwords do not match');
       return;
