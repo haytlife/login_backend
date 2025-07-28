@@ -4,15 +4,17 @@ import "./App.css";
 import Login from "./comp/Login/Login.jsx";
 import NotFound from "./comp/Login/NotFound.jsx";
 import { useAuth } from "./context/AuthContext.jsx";
+import Dashboard from './comp/Dashboard/Dashboard.jsx';
 
-// Dashboard olmadan basit bir component
-const SimpleDashboard = () => {
-  const { user, logout } = useAuth();
 
-  const handleLogout = () => {
-    logout();
-    window.location.href = '/login';
-  };
+/*Dashboard olmadan basit bir component
+//const SimpleDashboard = () => {
+  //const { user, logout } = useAuth();
+
+  //const handleLogout = () => {
+    //logout();
+    //window.location.href = '/login';
+  //};
 
   return (
     <div style={{ 
@@ -60,10 +62,10 @@ const SimpleDashboard = () => {
       </div>
     </div>
   );
-};
+};*/
 
 function App() {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
 
   return (
     <BrowserRouter>
@@ -72,9 +74,9 @@ function App() {
           path="/"
           element={user ? <Navigate to="/dashboard" /> : <Navigate to="/login" />}
         />
-        <Route
+       <Route
           path="/dashboard"
-          element={user ? <SimpleDashboard /> : <Navigate to="/login" />}
+          element={user ? <Dashboard user={user} onLogout={logout} /> : <Navigate to="/login" />}
         />
         <Route path="/login" element={<Login />} />
         <Route path="*" element={<NotFound />} />

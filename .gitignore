@@ -536,3 +536,43 @@ backup/
 # Team shared but temporary files
 shared-temp/
 team-temp/
+
+
+# # # GENEL # # #
+
+# İşletim sistemine özel, gereksiz dosyalar
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Log ve geçici dosyalar
+*.log
+*.tmp
+*.temp
+
+# Popüler IDE'lere ve editörlere özel ayar klasörleri
+.idea/
+.vscode/
+*.iml
+*.suo
+.project
+.buildpath
+.settings/
+
+
+# # # FLUTTER - /mobil/login_app/ ###
+
+# Flutter'ın proje durumunu ve bağımlılıklarını tuttuğu geçici klasörler
+/mobil/login_app/.dart_tool/
+/mobil/login_app/.metadata
+/mobil/login_app/.flutter-plugins
+/mobil/login_app/.flutter-plugins-dependencies
+
+# Flutter'ın derleme sonrası ürettiği ve cihaza yüklenen uygulama dosyaları
+/mobil/login_app/build/
+
+# IntelliJ (Android Studio) modül dosyaları
+/mobil/login_app/android/.gradle/
+/mobil/login_app/android/app/src/main/jniLibs/
+/mobil/login_app/android/app/profile/
+/mobil/login_app/android/app/release/
