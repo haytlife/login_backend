@@ -1,6 +1,6 @@
 # LoginProject - Authentication System
 
-Modern ve güvenli kullanıcı kimlik doğrulama sistemi. .NET 8 Web API backend ve React frontend ile geliştirilmiştir.
+Modern ve güvenli kullanıcı kimlik doğrulama sistemi. .NET 8 Web API backend, React frontend ve Flutter Mobil ile geliştirilmiştir.
 
 
 ## Özellikler
@@ -27,6 +27,12 @@ Modern ve güvenli kullanıcı kimlik doğrulama sistemi. .NET 8 Web API backend
 - **Styling**: TailwindCSS 4.0
 - **Routing**: React Router DOM
 - **State Management**: React Context API
+
+#### Mobil (Flutter)
+- **Framework**: Flutter SDK & Dart
+- **Ağ İstekleri (Networking)**: `http` paketi
+- **Yapılandırma (Configuration)**: `flutter_dotenv`
+- **Durum Yönetimi (State Management)**: `Provider`
 
 ## Kurulum
 
