@@ -2,6 +2,7 @@
 
 Modern ve güvenli kullanıcı kimlik doğrulama sistemi. .NET 8 Web API backend ve React frontend ile geliştirilmiştir.
 
+
 ## Özellikler
 
 - Kullanıcı Kayıt & Giriş: Email/şifre ile güvenli authentication
@@ -32,6 +33,7 @@ Modern ve güvenli kullanıcı kimlik doğrulama sistemi. .NET 8 Web API backend
 ### Gereksinimler
 - .NET 8.0 SDK veya üzeri
 - Node.js 18+ ve npm
+- Flutter SDK
 - Git
 
 ### 1. Projeyi Klonlayın
@@ -67,7 +69,26 @@ npm install
 # Development server'ı başlatın
 npm run dev
 ```
+### 4. Mobil (Flutter) Kurulumu
+
+```bash
+# Yeni bir terminal açın
+
+# Mobil uygulama klasörüne gidin
+cd mobil/login_app
+
+# Gerekli paketleri yükleyin
+flutter pub get
+
+# .env dosyasını oluşturun ve API adresini girin
+# (Detaylar için /mobil/README.md dosyasına bakın)
+
+# Uygulamayı çalıştırın
+flutter run
+```
+
 Frontend http://localhost:5173 adresinde çalışacaktır.
+Mobil http://localhost:5000 adresinde çalışacaktır.
 
 ## Kullanım
 
@@ -104,6 +125,14 @@ LoginProject/
 │   │   ├── services/         # API servisleri
 │   │   └── utils/           # Yardımcı fonksiyonlar
 │   └── public/              # Statik dosyalar
+├── mobil/                      # Mobil (Flutter)
+│   ├── login_app/
+│   │    ├── lib/
+│        │   ├── screens/       # Ekran (UI) kodları
+│        │   ├── services/      # API servisleri
+│        │   ├── models/        # Veri modelleri
+│        │   └── widgets/       # Yeniden kullanılabilir bileşenler
+└── pubspec.yaml        # Proje bağımlılıkları
 └── README.md
 ```
 

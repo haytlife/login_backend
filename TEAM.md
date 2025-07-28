@@ -13,7 +13,7 @@
 - JWT token yönetimi
 - Responsive tasarım
 
-### Mobile (Flutter - Geliştiriliyor)
+### Mobile (Flutter - Tamamlandı)
 - Cross-platform mobil uygulama
 - iOS ve Android desteği
 - Native performans
